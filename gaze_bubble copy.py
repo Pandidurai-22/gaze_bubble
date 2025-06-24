@@ -66,11 +66,11 @@ class EyeTracker:
         )
         self.cap = cv2.VideoCapture(0)
         
-        # Initialize GazeSmoothing with compatibility for different versions
+        
         try:
             self.smoother = GazeSmoothing(alpha=SMOOTHING_ALPHA)
         except TypeError:
-            # Fallback for versions that don't support alpha parameter
+            
             self.smoother = GazeSmoothing()
             if hasattr(self.smoother, 'alpha'):
                 self.smoother.alpha = SMOOTHING_ALPHA
@@ -83,7 +83,7 @@ class EyeTracker:
         self.LEFT_IRIS = [469, 470, 471, 472]
         self.RIGHT_IRIS = [474, 475, 476, 477]
         
-        self.head_movement_threshold = 0.05  # 5% of screen width
+        self.head_movement_threshold = 0.05  
         self.previous_head_position = None
         
        
@@ -186,15 +186,15 @@ class EyeTracker:
         landmarks = results.multi_face_landmarks[0].landmark
         
         try:
-            # Get left eye and iris landmarks
+            
             left_eye_corners = [landmarks[p] for p in self.LEFT_EYE]
             left_iris = np.mean([[landmarks[p].x, landmarks[p].y] for p in self.LEFT_IRIS], axis=0)
             
-            # Get right eye and iris landmarks
+            
             right_eye_corners = [landmarks[p] for p in self.RIGHT_EYE]
             right_iris = np.mean([[landmarks[p].x, landmarks[p].y] for p in self.RIGHT_IRIS], axis=0)
             
-            # Horizontal gaze (X-axis)
+            
             left_eye_width = abs(left_eye_corners[1].x - left_eye_corners[0].x)
             right_eye_width = abs(right_eye_corners[1].x - right_eye_corners[0].x)
             
@@ -202,9 +202,9 @@ class EyeTracker:
             right_ratio_x = (right_iris[0] - right_eye_corners[0].x) / right_eye_width
             gaze_ratio_x = 1 - ((left_ratio_x + right_ratio_x) / 2)  # INVERTED
             
-            # Vertical gaze (Y-axis)
-            left_eye_top = landmarks[159]   # approximate top
-            left_eye_bottom = landmarks[145] # approximate bottom
+            
+            left_eye_top = landmarks[159]   
+            left_eye_bottom = landmarks[145] 
             right_eye_top = landmarks[386]
             right_eye_bottom = landmarks[374]
             
@@ -279,15 +279,15 @@ class EyeTracker:
         if gaze_ratio_x is None or gaze_ratio_y is None:
             return None
             
-        # Use the calibration model to map ratios to screen coordinates
+        
         input_ratios = np.array([[gaze_ratio_x, gaze_ratio_y]])
         screen_x = self.model_x.predict(input_ratios)[0]
         screen_y = self.model_y.predict(input_ratios)[0]
         
-        # Apply smoothing
+        
         screen_x, screen_y = self.smoother.smooth_angles(screen_x, screen_y)
         
-        # Clamp to screen bounds
+        
         screen_x = max(0, min(SCREEN_WIDTH, screen_x))
         screen_y = max(0, min(SCREEN_HEIGHT, screen_y))
         
@@ -328,12 +328,12 @@ def show_instructions(screen):
                 return True
 
 def main():
-    # Initialize tracker and bubble
+    
     eye_tracker = EyeTracker()
     bubble = Bubble(SCREEN_WIDTH//2, SCREEN_HEIGHT//2)
     clock = pygame.time.Clock()
     
-    # Load and scale background image
+    
     try:
         background = pygame.image.load('background_new.png')
         background = pygame.transform.scale(background, (SCREEN_WIDTH, SCREEN_HEIGHT))
@@ -341,18 +341,18 @@ def main():
         print(f"Error loading background image: {e}")
         background = None
     
-    # Show instructions and wait for user to start calibration
+    
     if not show_instructions(screen):
         pygame.quit()
         return
     
-    # Run calibration
+    
     if not eye_tracker.calibrate(screen):
         print("Calibration failed or was cancelled.")
         pygame.quit()
         return
     
-    # Main tracking loop
+    
     current_zone = None
     running = True
     
@@ -361,15 +361,15 @@ def main():
             if event.type == QUIT or (event.type == KEYDOWN and event.key == K_ESCAPE):
                 running = False
         
-        # Get gaze position
+        
         gaze_pos = eye_tracker.get_gaze_position()
         
-        # Update bubble position if gaze detected
+        
         if gaze_pos:
             screen_x, screen_y = gaze_pos
             bubble.update(screen_x, screen_y)
             
-            # Determine gaze zone (optional)
+            
             if screen_x < SCREEN_WIDTH / 3:
                 new_zone = "Left"
             elif screen_x < 2 * SCREEN_WIDTH / 3:
@@ -377,29 +377,29 @@ def main():
             else:
                 new_zone = "Right"
                 
-            # Print zone only if it has changed
+            
             if new_zone != current_zone:
                 print(f"Looking at {new_zone} zone")
                 current_zone = new_zone
         
-        # Draw everything
-        if background:
-            screen.blit(background, (0, 0))  # Draw background image
-        else:
-            screen.fill((0, 0, 0))  # Fallback to black background
-            
-        bubble.draw(screen)  # Draw bubble on top of background
         
-        # Show status
+        if background:
+            screen.blit(background, (0, 0))
+        else:
+            screen.fill((0, 0, 0))
+            
+        bubble.draw(screen)
+        
+        
         font = pygame.font.Font(None, 36)
         status_text = "Tracking - Press ESC to exit"
         text = font.render(status_text, True, (255, 255, 255))
         screen.blit(text, (20, 20))
         
         pygame.display.flip()
-        clock.tick(60)  # Cap at 60 FPS
+        clock.tick(60)  
     
-    # Clean up
+    
     eye_tracker.cap.release()
     pygame.quit()
 
