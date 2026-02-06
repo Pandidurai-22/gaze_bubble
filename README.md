@@ -189,11 +189,14 @@ Potential enhancements:
 
 ## License
 
-[Add your license information here]
+This project is licensed under the MIT License – see the [LICENSE](LICENSE) file for details.
 
-## Contributing
 
-[Add contribution guidelines if applicable]
+## Author
+- Pandi Durai S 
+- Software Engineer (1.5+ years Experience)
+- pandidurai32127@gmail.com
+- +91 9751391299
 
 ## Acknowledgments
 
