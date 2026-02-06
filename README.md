@@ -2,6 +2,16 @@
 
 A real-time eye-tracking application that displays a visual bubble overlay on your screen, showing exactly where you're looking. Built with MediaPipe for face detection, OpenCV for camera processing, and Pygame for the transparent overlay display.
 
+## Demo
+
+Watch the demo video to see Gaze Bubble in action:
+
+<video src="assets/GazeBubble_demo.mp4" width="800" controls>
+  Your browser does not support the video tag. [Download the video](assets/GazeBubble_demo.mp4) instead.
+</video>
+
+*Note: If the video doesn't display, you can [download it directly](assets/GazeBubble_demo.mp4).*
+
 ## Features
 
 - **Real-time Eye Tracking**: Uses MediaPipe Face Mesh to detect and track eye movements
