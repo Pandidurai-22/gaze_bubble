@@ -7,10 +7,10 @@ A real-time eye-tracking application that displays a visual bubble overlay on yo
 Watch the demo video to see Gaze Bubble in action:
 
 <img src="assets/GazeBubble_giffile.gif">
-[Download the video](assets/GazeBubble_demo.mp4) instead.
+
 </img>
 
-*Note: If the video doesn't display, you can [download it directly](assets/GazeBubble_demo.mp4).*
+*Note: If you want the full demo video, you can [download it directly](assets/GazeBubble_demo.mp4).*
 
 ## Features
 
