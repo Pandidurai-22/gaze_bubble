@@ -102,7 +102,7 @@ class Bubble:
         # Draw main bubble (use RGB color, not RGBA)
         pygame.draw.circle(surface, BUBBLE_COLOR[:3], (int(self.x), int(self.y)), BUBBLE_RADIUS)
 
-# ... (Keep your EyeTracker class as is) ...
+
 
 class EyeTracker:
     def __init__(self):
